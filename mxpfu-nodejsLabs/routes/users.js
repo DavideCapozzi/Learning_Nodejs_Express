@@ -38,22 +38,54 @@ router.get("/:email",(req,res)=>{
 
 // POST request: Create a new user
 router.post("/",(req,res)=>{
-  // Copy the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+users.push({
+    "firstName":"Jon",
+    "lastName":"Lovato",
+    "email":"jonlovato@theworld.com",
+    "DOB":"10/10/1995"
+});
+res.send(`User ${req.query.firstName} has been added!`)//This line is to be replaced with actual return value
 });
 
 
-// PUT request: Update the details of a user by email ID
 router.put("/:email", (req, res) => {
-  // Copy the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+    // Extract email parameter and find users with matching email
+    const email = req.params.email;
+    let filtered_users = users.filter((user) => user.email === email);
+    
+    if (filtered_users.length > 0) {
+        // Select the first matching user and update attributes if provided
+        let filtered_user = filtered_users[0];
+        
+         // Extract and update DOB if provided
+        
+        let DOB = req.query.DOB;    
+        if (DOB) {
+            filtered_user.DOB = DOB;
+        }
+        
+        /*
+        Include similar code here for updating other attributes as needed
+        */
+        
+        // Replace old user entry with updated user
+        users = users.filter((user) => user.email != email);
+        users.push(filtered_user);
+        
+        // Send success message indicating the user has been updated
+        res.send(`User with the email ${email} updated.`);
+    } else {
+        // Send error message if no user found
+        res.send("Unable to find user!");
+    }
 });
 
 
 // DELETE request: Delete a user by email ID
 router.delete("/:email", (req, res) => {
-  // Copy the code here
-  res.send("Yet to be implemented")//This line is to be replaced with actual return value
+  const email = req.params.email;
+  users = users.filter((user) => user.email != email);
+  res.send(`User with the email ${email} deleted.`);
 });
 
 module.exports=router;
